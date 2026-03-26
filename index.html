@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa Escolar</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(rgba(245,245,245,0.9), rgba(245,245,245,0.9)),
+              url("https://images.unsplash.com/photo-1524758631624-e2822e304c36");
+  background-size: cover;
+}
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: rgba(255,255,255,0.96);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+h1 {
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.date-group {
+  display: flex;
+  gap: 10px;
+}
+
+.question {
+  margin-top: 35px;
+}
+
+.question label {
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.options label {
+  display: block;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  background: #f4f4f4;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.options label:hover {
+  background: #e8e8e8;
+}
+
+button {
+  width: 100%;
+  margin-top: 35px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #5a3e2b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3e2a1d;
+}
+
+.hidden {
+  display: none;
+}
+
+.success {
+  text-align: center;
+  color: green;
+  margin-top: 25px;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Pesquisa sobre Alimentação Escolar</h1>
+<p class="subtitle">Responda com sinceridade</p>
+
+<!-- ETAPA 1 -->
+<div id="step1">
+
+<label>Nome completo</label>
+<input type="text" id="nome">
+
+<label>Data de nascimento</label>
+<div class="date-group">
+  <input type="number" id="dia" placeholder="Dia">
+  <input type="number" id="mes" placeholder="Mês">
+  <input type="number" id="ano" placeholder="Ano">
+</div>
+
+<button onclick="nextStep()">Continuar</button>
+
+</div>
+
+<!-- ETAPA 2 -->
+<form id="form" class="hidden">
+
+<div class="question">
+<label>1- você gosta da alimentação escolar atual?</label>
+<div class="options">
+<label><input type="radio" name="q1"> A) Sim, estou satisfeito (a)</label>
+<label><input type="radio" name="q1"> B) A alimentação poderia ser melhor.</label>
+<label><input type="radio" name="q1"> C) a alimentação atual não me satisfaz.</label>
+<label><input type="radio" name="q1"> D) não como na escola.</label>
+</div>
+</div>
+
+<div class="question">
+<label>2- qual você acha ser a melhor decisão sobre a alimentação escolar?</label>
+<div class="options">
+<label><input type="radio" name="q2"> A) adicionar variedades de misturas, lanches e etc. Ao invés de ser apenas frango ou broa.</label>
+<label><input type="radio" name="q2"> B) melhorar a qualidade dos alimentos servidos.</label>
+<label><input type="radio" name="q2"> C) aumentar a quantidade de comida oferecida.</label>
+<label><input type="radio" name="q2"> D) manter como está.</label>
+</div>
+</div>
+
+<div class="question">
+<label>3- com que frequência você consome a alimentação escolar?</label>
+<div class="options">
+<label><input type="radio" name="q3"> A) todos os dias.</label>
+<label><input type="radio" name="q3"> B) na maioria dos dias.</label>
+<label><input type="radio" name="q3"> C) raramente.</label>
+<label><input type="radio" name="q3"> D) nunca.</label>
+</div>
+</div>
+
+<div class="question">
+<label>4- o que mais te incomoda na alimentação escolar atual?</label>
+<div class="options">
+<label><input type="radio" name="q4"> A) falta de variedade.</label>
+<label><input type="radio" name="q4"> B) sabor da comida.</label>
+<label><input type="radio" name="q4"> C) quantidade insuficiente.</label>
+<label><input type="radio" name="q4"> D) não me incomoda.</label>
+</div>
+</div>
+
+<div class="question">
+<label>5- o que você gostaria que fosse incluído no cardápio escolar?</label>
+<div class="options">
+<label><input type="radio" name="q5"> A) mais frutas e alimentos saudáveis.</label>
+<label><input type="radio" name="q5"> B) lanches diferentes (sanduíches, bolos, etc.).</label>
+<label><input type="radio" name="q5"> C) opções diferentes de preparo (assados, grelhados, menos repetição).</label>
+<label><input type="radio" name="q5"> D) bebidas variadas (sucos, vitaminas, etc.).</label>
+</div>
+</div>
+
+<button type="submit">Enviar</button>
+<div class="success" id="successMsg">Resposta enviada com sucesso!</div>
+
+</form>
+
+</div>
+
+<script>
+function calcularIdade(dia, mes, ano) {
+  const hoje = new Date();
+  let idade = hoje.getFullYear() - ano;
+
+  if (
+    hoje.getMonth() + 1 < mes ||
+    (hoje.getMonth() + 1 === mes && hoje.getDate() < dia)
+  ) {
+    idade--;
+  }
+
+  return idade;
+}
+
+function nextStep() {
+  const nome = document.getElementById("nome").value.trim();
+  const dia = parseInt(document.getElementById("dia").value);
+  const mes = parseInt(document.getElementById("mes").value);
+  const ano = parseInt(document.getElementById("ano").value);
+
+  if (!nome || !dia || !mes || !ano) {
+    alert("Preencha todos os campos antes de continuar.");
+    return;
+  }
+
+  if (dia < 1 || dia > 31 || mes < 1 || mes > 12) {
+    alert("Data inválida.");
+    return;
+  }
+
+  const idade = calcularIdade(dia, mes, ano);
+
+  if (idade < 5 || idade > 100) {
+    alert("Idade inválida. Insira uma idade realista.");
+    return;
+  }
+
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("form").classList.remove("hidden");
+}
+
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const perguntas = ["q1","q2","q3","q4","q5"];
+
+  for (let p of perguntas) {
+    if (!document.querySelector(`input[name="${p}"]:checked`)) {
+      alert("Responda todas as perguntas antes de enviar.");
+      return;
+    }
+  }
+
+  document.getElementById("successMsg").style.display = "block";
+});
+</script>
+
+</body>
+</html>
